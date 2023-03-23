@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="memedatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="idcomment" />
+          </Key>
+          <Property Name="idcomment" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userid" Type="int" Nullable="false" />
+          <Property Name="postid" Type="int" Nullable="false" />
+          <Property Name="text" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="post">
+          <Key>
+            <PropertyRef Name="idpost" />
+          </Key>
+          <Property Name="idpost" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="image" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="userid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="upvote">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="postid" Type="int" Nullable="false" />
+          <Property Name="userid" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="iduser" />
+          </Key>
+          <Property Name="iduser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="karma" Type="nvarchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <Association Name="comment$fk_post_comment">
+          <End Role="post" Type="Self.post" Multiplicity="1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="post">
+              <PropertyRef Name="idpost" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="postid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="comment$fk_user_comment">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="iduser" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="post$fk_user_post">
+          <End Role="user" Type="Self.user" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="post" Type="Self.post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="iduser" />
+            </Principal>
+            <Dependent Role="post">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="upvote$fk_post_upvote">
+          <End Role="post" Type="Self.post" Multiplicity="1" />
+          <End Role="upvote" Type="Self.upvote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="post">
+              <PropertyRef Name="idpost" />
+            </Principal>
+            <Dependent Role="upvote">
+              <PropertyRef Name="postid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="upvote$fk_user_upvote">
+          <End Role="user" Type="Self.user" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="upvote" Type="Self.upvote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="iduser" />
+            </Principal>
+            <Dependent Role="upvote">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="memedatabaseModelStoreContainer">
+          <EntitySet Name="comment" EntityType="Self.comment" Schema="memedatabase" store:Type="Tables" />
+          <EntitySet Name="post" EntityType="Self.post" Schema="memedatabase" store:Type="Tables" />
+          <EntitySet Name="upvote" EntityType="Self.upvote" Schema="memedatabase" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="memedatabase" store:Type="Tables" />
+          <AssociationSet Name="comment$fk_post_comment" Association="Self.comment$fk_post_comment">
+            <End Role="post" EntitySet="post" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="comment$fk_user_comment" Association="Self.comment$fk_user_comment">
+            <End Role="user" EntitySet="user" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="post$fk_user_post" Association="Self.post$fk_user_post">
+            <End Role="user" EntitySet="user" />
+            <End Role="post" EntitySet="post" />
+          </AssociationSet>
+          <AssociationSet Name="upvote$fk_post_upvote" Association="Self.upvote$fk_post_upvote">
+            <End Role="post" EntitySet="post" />
+            <End Role="upvote" EntitySet="upvote" />
+          </AssociationSet>
+          <AssociationSet Name="upvote$fk_user_upvote" Association="Self.upvote$fk_user_upvote">
+            <End Role="user" EntitySet="user" />
+            <End Role="upvote" EntitySet="upvote" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="memedatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="idcomment" />
+          </Key>
+          <Property Name="idcomment" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userid" Type="Int32" Nullable="false" />
+          <Property Name="postid" Type="Int32" Nullable="false" />
+          <Property Name="text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="post" Relationship="Self.comment_fk_post_comment" FromRole="comment" ToRole="post" />
+          <NavigationProperty Name="user" Relationship="Self.comment_fk_user_comment" FromRole="comment" ToRole="user" />
+        </EntityType>
+        <EntityType Name="post">
+          <Key>
+            <PropertyRef Name="idpost" />
+          </Key>
+          <Property Name="idpost" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="userid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="comments" Relationship="Self.comment_fk_post_comment" FromRole="post" ToRole="comment" />
+          <NavigationProperty Name="user" Relationship="Self.post_fk_user_post" FromRole="post" ToRole="user" />
+          <NavigationProperty Name="upvotes" Relationship="Self.upvote_fk_post_upvote" FromRole="post" ToRole="upvote" />
+        </EntityType>
+        <EntityType Name="upvote">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="postid" Type="Int32" Nullable="false" />
+          <Property Name="userid" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="post" Relationship="Self.upvote_fk_post_upvote" FromRole="upvote" ToRole="post" />
+          <NavigationProperty Name="user" Relationship="Self.upvote_fk_user_upvote" FromRole="upvote" ToRole="user" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="iduser" />
+          </Key>
+          <Property Name="iduser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="karma" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="comments" Relationship="Self.comment_fk_user_comment" FromRole="user" ToRole="comment" />
+          <NavigationProperty Name="posts" Relationship="Self.post_fk_user_post" FromRole="user" ToRole="post" />
+          <NavigationProperty Name="upvotes" Relationship="Self.upvote_fk_user_upvote" FromRole="user" ToRole="upvote" />
+        </EntityType>
+        <Association Name="comment_fk_post_comment">
+          <End Role="post" Type="Self.post" Multiplicity="1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="post">
+              <PropertyRef Name="idpost" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="postid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="comment_fk_user_comment">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="iduser" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="post_fk_user_post">
+          <End Role="user" Type="Self.user" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="post" Type="Self.post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="iduser" />
+            </Principal>
+            <Dependent Role="post">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="upvote_fk_post_upvote">
+          <End Role="post" Type="Self.post" Multiplicity="1" />
+          <End Role="upvote" Type="Self.upvote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="post">
+              <PropertyRef Name="idpost" />
+            </Principal>
+            <Dependent Role="upvote">
+              <PropertyRef Name="postid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="upvote_fk_user_upvote">
+          <End Role="user" Type="Self.user" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="upvote" Type="Self.upvote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="iduser" />
+            </Principal>
+            <Dependent Role="upvote">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="memedatabaseEntities3" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="comments" EntityType="Self.comment" />
+          <EntitySet Name="posts" EntityType="Self.post" />
+          <EntitySet Name="upvotes" EntityType="Self.upvote" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="comment_fk_post_comment" Association="Self.comment_fk_post_comment">
+            <End Role="post" EntitySet="posts" />
+            <End Role="comment" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="comment_fk_user_comment" Association="Self.comment_fk_user_comment">
+            <End Role="user" EntitySet="users" />
+            <End Role="comment" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="post_fk_user_post" Association="Self.post_fk_user_post">
+            <End Role="user" EntitySet="users" />
+            <End Role="post" EntitySet="posts" />
+          </AssociationSet>
+          <AssociationSet Name="upvote_fk_post_upvote" Association="Self.upvote_fk_post_upvote">
+            <End Role="post" EntitySet="posts" />
+            <End Role="upvote" EntitySet="upvotes" />
+          </AssociationSet>
+          <AssociationSet Name="upvote_fk_user_upvote" Association="Self.upvote_fk_user_upvote">
+            <End Role="user" EntitySet="users" />
+            <End Role="upvote" EntitySet="upvotes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="memedatabaseModelStoreContainer" CdmEntityContainer="memedatabaseEntities3">
+          <EntitySetMapping Name="comments">
+            <EntityTypeMapping TypeName="memedatabaseModel.comment">
+              <MappingFragment StoreEntitySet="comment">
+                <ScalarProperty Name="idcomment" ColumnName="idcomment" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="postid" ColumnName="postid" />
+                <ScalarProperty Name="text" ColumnName="text" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="posts">
+            <EntityTypeMapping TypeName="memedatabaseModel.post">
+              <MappingFragment StoreEntitySet="post">
+                <ScalarProperty Name="idpost" ColumnName="idpost" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="upvotes">
+            <EntityTypeMapping TypeName="memedatabaseModel.upvote">
+              <MappingFragment StoreEntitySet="upvote">
+                <ScalarProperty Name="postid" ColumnName="postid" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="memedatabaseModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="iduser" ColumnName="iduser" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="karma" ColumnName="karma" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
